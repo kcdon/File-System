@@ -1,3 +1,5 @@
+### Completely implemented in C ### 
+
 Flag | Description 
 -----|------------
 `-b [LONG]` | Specifies the size of a block in the system memory.
