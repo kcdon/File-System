@@ -25,16 +25,7 @@ char** str_to_vec(char *str, char split_c) {
                 m++;
         }
         
-        /* Make the new string */
-        next = (char*) malloc((n+1) * sizeof(char));
-        for (i = 0, j = 0; i < n; i++) {
-            if (str[k+i+j] == '\\')
-                j++;
-            next[i] = str[k+i+j];
-        }
-        next[n] = '\0';
-
-        vec[size] = next;
+        
 
         /* Realloc */
         size++;
@@ -47,6 +38,17 @@ char** str_to_vec(char *str, char split_c) {
 
         vec = tmp;
         vec[size] = NULL;
+        
+        /* Make the new string */
+        next = (char*) malloc((n+1) * sizeof(char));
+        for (i = 0, j = 0; i < n; i++) {
+            if (str[k+i+j] == '\\')
+                j++;
+            next[i] = str[k+i+j];
+        }
+        next[n] = '\0';
+
+        vec[size] = next;
         
         /* Update k */
         while (str[k+m+n] == split_c)
@@ -61,18 +63,7 @@ char** str_to_vec(char *str, char split_c) {
 
 }
 
-void free_str_vec(char **vec) {
-    int i;
-    for (i = 0; vec[i]; i++) {
-        free(vec[i]);
-        vec[i] = NULL;
-    }
-    free(vec);
-}
 
-void error_message(char *cmd, char *mssg) {
-    printf("%s: Cannot perform operation: %s\n", cmd, mssg);
-}
 
 void printTreeNode(DirTree node, int fullpath, int details) {
     char *filename;
@@ -150,6 +141,18 @@ void printTreeNode(DirTree node, int fullpath, int details) {
             printf("\n");
             */   
 }
+void free_str_vec(char **vec) {
+    int i;
+    for (i = 0; vec[i]; i++) {
+        free(vec[i]);
+        vec[i] = NULL;
+    }
+    free(vec);
+}
+
+void error_message(char *cmd, char *mssg) {
+    printf("%s: Cannot perform operation: %s\n", cmd, mssg);
+}
 
 /**
  * Runs a command.
@@ -170,8 +173,6 @@ void cmd_exec(char *argv[]) {
         cmd = cmd_ls;
     else if (!strcmp(name, "mkdir"))
         cmd = cmd_mkdir;
-    else if (!strcmp(name, "create"))
-        cmd = cmd_create;
     else if (!strcmp(name, "append"))
         cmd = cmd_append;
     else if (!strcmp(name, "remove"))
@@ -180,6 +181,9 @@ void cmd_exec(char *argv[]) {
         cmd = cmd_delete;
     else if (!strcmp(name, "exit"))
         cmd = cmd_exit;
+    else if (!strcmp(name, "create"))
+        cmd = cmd_create;
+
     else if (!strcmp(name, "dir"))
         cmd = cmd_dir;
     else if (!strcmp(name, "prfiles"))
